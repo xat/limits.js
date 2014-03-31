@@ -1,7 +1,7 @@
 {
   "name": "limits.js",
   "version": "0.1.0",
-  "description": "limits.js helps you to respect api limitations",
+  "description": "limits.js helps you to handle API limitations",
   "main": "limits.js",
   "directories": {
     "test": "test"
