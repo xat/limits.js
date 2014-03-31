@@ -1,0 +1,33 @@
+{
+  "name": "limits.js",
+  "version": "0.1.0",
+  "description": "limits.js helps you to respect api limitations",
+  "main": "limits.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xat/limits.js"
+  },
+  "keywords": [
+    "limits",
+    "limit",
+    "api"
+  ],
+  "author": "Simon Kusterer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xat/limits.js/issues"
+  },
+  "homepage": "https://github.com/xat/limits.js",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "gulp-uglify": "^0.2.1",
+    "gulp-concat": "^2.2.0",
+    "gulp": "^3.6.0"
+  }
+}
