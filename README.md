@@ -11,38 +11,38 @@ limits.js works with Node.JS and in the Browser.
 
 ```javascript
 
-    limits = require('limits.js');
+limits = require('limits.js');
 
-    queue = limits({
-        secondly: 1, // allow 1 call per second
-        minutely: 2  // allow 2 calls per minute
-    });
+queue = limits({
+    secondly: 1, // allow 1 call per second
+    minutely: 2  // allow 2 calls per minute
+});
 
-    queue.push(function() {
-        // this function will run instantly
-    });
+queue.push(function() {
+    // this function will run instantly
+});
 
-    queue.push(function() {
-        // this function will run after
-        // a 1 second delay
-    });
+queue.push(function() {
+    // this function will run after
+    // a 1 second delay
+});
 
-    queue.push(function() {
-        // this function will run
-        // after a 60 second delay
-        // since we already exceeded
-        // the two calls per minute restriction
-    });
+queue.push(function() {
+    // this function will run
+    // after a 60 second delay
+    // since we already exceeded
+    // the two calls per minute restriction
+});
 
-    queue.push(function() {
-        // this function will not get executed
-        // because we have defined an conditional
-        // function which defines that this function
-        // should only get called if the delay is
-        // under 10 seconds.
-    }, function(delay) {
-        return delay < 10000;
-    });
+queue.push(function() {
+    // this function will not get executed
+    // because we have defined an conditional
+    // function which defines that this function
+    // should only get called if the delay is
+    // under 10 seconds.
+}, function(delay) {
+    return delay < 10000;
+});
 
 ```
 
@@ -103,7 +103,6 @@ service.weekly(Numeric);
 // No problem, try this:
 
 service.within(timerange, maxcalls);
-
 
 // With the 'push' method you are able to push a function
 // into the execution stack.
