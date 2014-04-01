@@ -12,7 +12,7 @@ describe('limits tests', function() {
         expect(limits.RuleChain).to.be.an(Function);
     });
 
-    it('should throw an exception', function() {
+    it('should throw an RulesError exception', function() {
         expect(function() {
             limits().push(fn);
         }).to.throwException(function (e) {
@@ -55,6 +55,20 @@ describe('limits tests', function() {
         expect(rules.push(fn).delay).to.be.within(119900, 120000);
         expect(rules.push(fn).delay).to.be.within(3599900, 3600000);
         expect(rules.push(fn).delay).to.be.within(3659900, 3660000);
+    });
+
+    it('should throw an MaxcallsRangeError exception', function() {
+        expect(function() {
+            limits().secondly(0);
+        }).to.throwException(function (e) {
+            expect(e.name).to.equal('MaxcallsRangeError');
+        });
+
+        expect(function() {
+            limits().secondly(1.5);
+        }).to.throwException(function (e) {
+            expect(e.name).to.equal('MaxcallsRangeError');
+        });
     });
 
     it('should execute the pushed function', function(done) {

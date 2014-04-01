@@ -120,6 +120,15 @@
     RuleChain.prototype.within = function(millis, maxcalls) {
         var that = this;
 
+        // check if maxcalls is an integer and
+        // it is greater than 0
+        if (maxcalls % 1 !== 0 || maxcalls < 1) {
+            throw {
+                name: 'MaxcallsRangeError',
+                message: 'maxcalls must be above 0 and an integer'
+            };
+        }
+
         this.register(function(now, track) {
             var past = now - millis,
                 idx = that._bsearch(past),
