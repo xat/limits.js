@@ -9,7 +9,6 @@
         weekly: 604800000
     };
 
-    // Construct a new RuleChain
     var RuleChain = function(opts) {
         this.options = opts || {};
 
@@ -23,14 +22,14 @@
     };
 
     // Determ when the next call can be made.
-    // This returns an value in milliseconds
+    // Returns an delay in milliseconds
     RuleChain.prototype.whensNext = function() {
         return this._process().delay;
     };
 
     // Push a function into the call stack.
     // Optionally a second conditional function
-    // can get passed in. This functions gets an 'delay'
+    // can get passed in. The conditional function gets an 'delay'
     // parameter passed in as first argument which indicates
     // after how much milliseconds fn will get called.
     // Returning false in the conditional function prevent
@@ -65,10 +64,10 @@
         };
     };
 
-    // Run through all buckets and determ when
+    // Run through all rules and determ when
     // the next call can be made. Each Bucket
     // also returns also an 'spliceIdx'.
-    // The spliceIdx identicates from which index
+    // The spliceIdx indicates from which index
     // on the track array can be saftely cleared,
     RuleChain.prototype._process = function() {
         var est = (function(memo, rules, track) {
