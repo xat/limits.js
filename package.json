@@ -15,8 +15,9 @@
   },
   "keywords": [
     "limits",
-    "limit",
-    "api"
+    "limiting",
+    "rate-limiting",
+    "rate-limit"
   ],
   "author": {
       "name": "Simon Kusterer",
