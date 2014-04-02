@@ -43,7 +43,7 @@ describe('limits tests', function() {
         expect(rules._getInsertPosition(20)).to.equal(6);
     });
 
-    it('should determ the correct execution delay', function() {
+    it('should determinate the correct execution delay', function() {
         var rules = limits({
             secondly: 1,
             minutely: 1,
@@ -55,6 +55,14 @@ describe('limits tests', function() {
         expect(rules.push(fn).delay).to.be.within(119900, 120000);
         expect(rules.push(fn).delay).to.be.within(3599900, 3600000);
         expect(rules.push(fn).delay).to.be.within(3659900, 3660000);
+
+        rules = limits().within(2000, 1).within(10000, 2);
+
+        expect(rules.push(fn).delay).to.equal(0);
+        expect(rules.push(fn).delay).to.be.within(1900, 2000);
+        expect(rules.push(fn).delay).to.be.within(9900, 10000);
+        expect(rules.push(fn).delay).to.be.within(11900, 12000);
+        expect(rules.push(fn).delay).to.be.within(19900, 20000);
     });
 
     it('should throw an MaxcallsRangeError exception', function() {
