@@ -81,35 +81,31 @@
     // spliceIdx indicates from which index
     // on the track array can be safely cleared.
     RuleChain.prototype._runRules = function() {
-        var est = (function(memo, rules, track) {
-            var now = Date.now();
+        var now = Date.now(),
+            memo = {
+                delay: 0
+            };
 
-            for (var i = 0, len = rules.length; i < len; i++) {
-                (function(fn) {
-                    var comp = fn(now, track);
-                    if (memo.delay < comp.delay) {
-                        memo.delay = comp.delay
-                    }
+        for (var i = 0, len = this.rules.length; i < len; i++) {
+            var comp = this.rules[i](now, this.track);
 
-                    if (!('spliceIdx' in memo) || memo.spliceIdx > comp.spliceIdx) {
-                        memo.spliceIdx = comp.spliceIdx
-                    }
-                })(rules[i]);
+            if (memo.delay < comp.delay) {
+                memo.delay = comp.delay
             }
 
-            return memo;
-        })({
-            delay: 0
-        }, this.rules, this.track);
-
-        if (('spliceIdx' in est) && est.spliceIdx > 0) {
-            if (typeof this.options.onClear === 'function') {
-                this.options.onClear(this.track[est.spliceIdx]);
+            if (!('spliceIdx' in memo) || memo.spliceIdx > comp.spliceIdx) {
+                memo.spliceIdx = comp.spliceIdx
             }
-            this.track.splice(0, est.spliceIdx);
         }
 
-        return est;
+        if (('spliceIdx' in memo) && memo.spliceIdx > 0) {
+            if (typeof this.options.onClear === 'function') {
+                this.options.onClear(this.track[memo.spliceIdx]);
+            }
+            this.track.splice(0, memo.spliceIdx);
+        }
+
+        return memo;
     };
 
     // inspired by _.sortedIndex
@@ -117,11 +113,14 @@
     // array 'this.track' where 'val'
     // could be inserted
     RuleChain.prototype._getInsertPosition = function(val) {
-        var low = 0, high = this.track.length;
+        var low = 0,
+            high = this.track.length;
+
         while (low < high) {
             var mid = (low + high) >>> 1;
             this.track[mid] < val ? low = mid + 1 : high = mid;
         }
+
         return low;
     };
 
@@ -145,6 +144,7 @@
                 idx = that._getInsertPosition(past),
                 rest = track.length - idx,
                 delay = (rest >= maxcalls) ? (track[idx + (rest - maxcalls)] + millis) - now : 0;
+
             return {
                 delay: delay,
                 spliceIdx: idx
@@ -157,11 +157,11 @@
     // Create some methods out of our RANGES Object
     for (var name in RANGES) {
         if (!RANGES.hasOwnProperty(name)) continue;
-        (function(name, millis) {
+        (function(name) {
             RuleChain.prototype[name] = function(maxcalls) {
-                return this.within(millis, maxcalls);
+                return this.within(RANGES[name], maxcalls);
             }
-        })(name, RANGES[name]);
+        })(name);
     }
 
     // Register a custom rule.
