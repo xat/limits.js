@@ -1,5 +1,8 @@
 ;(function(ctx) {
 
+    // These ranges will get used
+    // to 'automaticly' create the specific
+    // methods and options.
     var RANGES = {
         secondly: 1000,
         minutely: 60000,
@@ -12,16 +15,24 @@
     var RuleChain = function(opts) {
         this.options = opts || {};
 
+        // In the 'track' array we save the
+        // timestamps of each call in history
+        // and the future. We need to store this
+        // information, otherwise we would not be
+        // able to calculate which delay the next call
+        // should have.
         this.track = this.options.history || [];
+
         this.rules = [];
 
+        // Auto-Create the timerange options
         for (var name in RANGES) {
             if (!RANGES.hasOwnProperty(name)) continue;
             if (name in this.options) this[name](this.options[name]);
         }
     };
 
-    // Determ when the next call can be made.
+    // Determinate when the next call can be made.
     // Returns an delay in milliseconds
     RuleChain.prototype.getNextDelay = function() {
         return this._runRules().delay;
@@ -31,8 +42,8 @@
     // Optionally a second conditional function
     // can get passed in. The conditional function gets an 'delay'
     // parameter passed in as first argument which indicates
-    // after how much milliseconds fn will get called.
-    // Returning false in the conditional function prevent
+    // after how many milliseconds fn will get called.
+    // Returning false in the conditional function prevents
     // fn from being added to the call stack.
     RuleChain.prototype.push = function(fn, cond) {
         var delay = this.getNextDelay(),
@@ -64,11 +75,11 @@
         };
     };
 
-    // Run through all rules and determ when
-    // the next call can be made. Each Bucket
-    // also returns also an 'spliceIdx'.
-    // The spliceIdx indicates from which index
-    // on the track array can be safely cleared,
+    // Run through all rules and determinate when
+    // the next call can be made. Each rule
+    // also returns also a property 'spliceIdx'.
+    // spliceIdx indicates from which index
+    // on the track array can be safely cleared.
     RuleChain.prototype._runRules = function() {
         var est = (function(memo, rules, track) {
             var now = Date.now();
@@ -154,16 +165,12 @@
     }
 
     // Register a custom rule.
-    // fn gets two arguments passed in:
-    // 'now', which is a timestamp and
-    // 'tracks', which is an array history and
-    // future calls.
     RuleChain.prototype.register = function(fn) {
         this.rules.push(fn);
         return this;
     };
 
-    // This is basicly just a factory
+    // This is basically just a factory
     // to create new RuleChains
     var limits = function(opts) {
         return new RuleChain(opts);
