@@ -23,8 +23,8 @@
 
     // Determ when the next call can be made.
     // Returns an delay in milliseconds
-    RuleChain.prototype.whensNext = function() {
-        return this._process().delay;
+    RuleChain.prototype.getNextDelay = function() {
+        return this._runRules().delay;
     };
 
     // Push a function into the call stack.
@@ -35,7 +35,7 @@
     // Returning false in the conditional function prevent
     // fn from being added to the call stack.
     RuleChain.prototype.push = function(fn, cond) {
-        var delay = this.whensNext(),
+        var delay = this.getNextDelay(),
             that = this;
 
         if (!this.rules.length) {
@@ -68,8 +68,8 @@
     // the next call can be made. Each Bucket
     // also returns also an 'spliceIdx'.
     // The spliceIdx indicates from which index
-    // on the track array can be saftely cleared,
-    RuleChain.prototype._process = function() {
+    // on the track array can be safely cleared,
+    RuleChain.prototype._runRules = function() {
         var est = (function(memo, rules, track) {
             var now = Date.now();
 
@@ -105,7 +105,7 @@
     // find the position in the sorted
     // array 'this.track' where 'val'
     // could be inserted
-    RuleChain.prototype._bsearch = function(val) {
+    RuleChain.prototype._getInsertPosition = function(val) {
         var low = 0, high = this.track.length;
         while (low < high) {
             var mid = (low + high) >>> 1;
@@ -131,7 +131,7 @@
 
         this.register(function(now, track) {
             var past = now - millis,
-                idx = that._bsearch(past),
+                idx = that._getInsertPosition(past),
                 rest = track.length - idx,
                 delay = (rest >= maxcalls) ? (track[idx + (rest - maxcalls)] + millis) - now : 0;
             return {

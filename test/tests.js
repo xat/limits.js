@@ -36,11 +36,11 @@ describe('limits tests', function() {
             history: [1,2,3,5,5,10]
         });
 
-        expect(rules._bsearch(0)).to.equal(0);
-        expect(rules._bsearch(1)).to.equal(0);
-        expect(rules._bsearch(5)).to.equal(3);
-        expect(rules._bsearch(10)).to.equal(5);
-        expect(rules._bsearch(20)).to.equal(6);
+        expect(rules._getInsertPosition(0)).to.equal(0);
+        expect(rules._getInsertPosition(1)).to.equal(0);
+        expect(rules._getInsertPosition(5)).to.equal(3);
+        expect(rules._getInsertPosition(10)).to.equal(5);
+        expect(rules._getInsertPosition(20)).to.equal(6);
     });
 
     it('should determ the correct execution delay', function() {
