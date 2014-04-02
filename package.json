@@ -1,6 +1,6 @@
 {
   "name": "limits.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "limits.js helps you to handle API limitations",
   "main": "limits.js",
   "directories": {
