@@ -12,7 +12,12 @@
         weekly: 604800000
     };
 
-    var RuleChain = function(opts) {
+    var limits = function(opts) {
+        // allow the 'new' keyword to be used or not..
+        if (!limits.prototype.isPrototypeOf(this)) {
+            return new limits(opts);
+        }
+
         this.options = opts || {};
 
         // In the 'track' array we save the
@@ -34,7 +39,7 @@
 
     // Determinate when the next call can be made.
     // Returns an delay in milliseconds
-    RuleChain.prototype.getNextDelay = function() {
+    limits.prototype.getNextDelay = function() {
         return this._runRules().delay;
     };
 
@@ -45,7 +50,7 @@
     // after how many milliseconds fn will get called.
     // Returning false in the conditional function prevents
     // fn from being added to the call stack.
-    RuleChain.prototype.push = function(fn, cond) {
+    limits.prototype.push = function(fn, cond) {
         var delay = this.getNextDelay(),
             that = this;
 
@@ -80,7 +85,7 @@
     // also returns also a property 'spliceIdx'.
     // spliceIdx indicates from which index
     // on the track array can be safely cleared.
-    RuleChain.prototype._runRules = function() {
+    limits.prototype._runRules = function() {
         var now = Date.now(),
             memo = {
                 delay: 0
@@ -112,7 +117,7 @@
     // find the position in the sorted
     // array 'this.track' where 'val'
     // could be inserted
-    RuleChain.prototype._getInsertPosition = function(val) {
+    limits.prototype._getInsertPosition = function(val) {
         var low = 0,
             high = this.track.length;
 
@@ -127,7 +132,7 @@
     // Register a new rule which indicates that within
     // a period of 'millis' only a certain amount
     // of 'maxcalls' can be made.
-    RuleChain.prototype.within = function(millis, maxcalls) {
+    limits.prototype.within = function(millis, maxcalls) {
         var that = this;
 
         // check if maxcalls is an integer and
@@ -158,25 +163,17 @@
     for (var name in RANGES) {
         if (!RANGES.hasOwnProperty(name)) continue;
         (function(name) {
-            RuleChain.prototype[name] = function(maxcalls) {
+            limits.prototype[name] = function(maxcalls) {
                 return this.within(RANGES[name], maxcalls);
             }
         })(name);
     }
 
     // Register a custom rule.
-    RuleChain.prototype.register = function(fn) {
+    limits.prototype.register = function(fn) {
         this.rules.push(fn);
         return this;
     };
-
-    // This is basically just a factory
-    // to create new RuleChains
-    var limits = function(opts) {
-        return new RuleChain(opts);
-    };
-
-    limits.RuleChain = RuleChain;
 
     // Node.js / browserify
     if (typeof module !== 'undefined' && module.exports) {

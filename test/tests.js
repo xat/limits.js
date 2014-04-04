@@ -9,7 +9,8 @@ describe('limits tests', function() {
 
     it('should exist', function() {
         expect(limits).to.be.an(Function);
-        expect(limits.RuleChain).to.be.an(Function);
+        var l = new limits();
+        expect(l.secondly).to.be.an(Function);
     });
 
     it('should throw an RulesError exception', function() {
