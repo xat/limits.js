@@ -11,9 +11,9 @@ limits.js works with Node.JS and in the Browser.
 
 ```javascript
 
-limits = require('limits.js');
+var limits = require('limits.js');
 
-queue = limits({
+var queue = limits({
     secondly: 1, // allow 1 call per second
     minutely: 2  // allow 2 calls per minute
 });
