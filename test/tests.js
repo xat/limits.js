@@ -1,6 +1,6 @@
 if (typeof module !== 'undefined' && module.exports) {
-    expect = require('expect.js');
-    limits = require('../limits');
+    var expect = require('expect.js');
+    var limits = require('../limits');
 }
 
 describe('limits tests', function() {
