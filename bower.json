@@ -1,0 +1,29 @@
+{
+  "name": "limits.js",
+  "main": "limits.js",
+  "version": "0.1.4",
+  "homepage": "https://github.com/xat/limits.js",
+  "authors": [
+    "Simon Kusterer <simon@sope.io>"
+  ],
+  "description": "limits.js helps you to handle API limitations",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "limits",
+    "limiting",
+    "rate-limiting",
+    "rate-limit"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

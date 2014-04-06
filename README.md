@@ -56,7 +56,9 @@ npm install limits.js
 
 #### Browser
 
-There is minified version availible in the build directory.
+```
+bower install limits.js
+```
 
 ### Usage
 
